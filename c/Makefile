@@ -26,16 +26,16 @@ LIBS= \
 	$(KALDI_ROOT)/src/util/kaldi-util.a \
 	$(KALDI_ROOT)/src/base/kaldi-base.a \
 	$(KALDI_ROOT)/tools/OpenBLAS/install/lib/libopenblas.a \
-	$(KALDI_ROOT)/tools/OpenBLAS/install/lib/liblapack.a \
-	$(KALDI_ROOT)/tools/OpenBLAS/install/lib/libblas.a \
-	$(KALDI_ROOT)/tools/OpenBLAS/install/lib/libf2c.a \
 	$(KALDI_ROOT)/tools/openfst/lib/libfst.a \
 	$(KALDI_ROOT)/tools/openfst/lib/libfstngram.a
 
-all: test_vosk test_vosk_speaker
+all: test_vosk test_vosk_speaker mic_vosk
+
+mic_vosk: mic_vosk.o libvosk.a
+	g++ $^ -o $@ $(LIBS) -lpthread -lgfortran -lportaudio
 
 test_vosk: test_vosk.o libvosk.a
-	g++ $^ -o $@ $(LIBS) -lpthread
+	g++ $^ -o $@ $(LIBS) -lpthread -lgfortran
 
 test_vosk_speaker: test_vosk_speaker.o libvosk.a
 	g++ $^ -o $@ $(LIBS) -lpthread
